@@ -23,6 +23,19 @@ const envSchema = z.object({
         .map((entry) => entry.trim())
         .filter(Boolean),
     ),
+
+  /** Uniquement en développement : POST /v1/auth/dev-login sans base utilisateurs. */
+  DEV_AUTH_BYPASS: z
+    .string()
+    .optional()
+    .default("")
+    .transform((value) => value === "1" || value.toLowerCase() === "true"),
+
+  /**
+   * Métriques : `1` = données mockées (illustration), `0` = séries vides jusqu’à Prisma.
+   * Non défini = mock en development uniquement.
+   */
+  METRICS_USE_MOCK: z.enum(["0", "1"]).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

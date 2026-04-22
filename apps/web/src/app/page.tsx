@@ -1,3 +1,7 @@
+import Link from "next/link";
+
+import { WEB_ROUTES } from "shared";
+
 export default function HomePage() {
   return (
     <main className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
@@ -14,18 +18,18 @@ export default function HomePage() {
           source de vérité.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <a
-            href="/login"
+          <Link
+            href={WEB_ROUTES.login}
             className="flex h-11 items-center justify-center rounded-full bg-zinc-900 px-6 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
           >
             Se connecter
-          </a>
-          <a
-            href="/register"
+          </Link>
+          <Link
+            href={WEB_ROUTES.register}
             className="flex h-11 items-center justify-center rounded-full border border-zinc-300 px-6 text-sm font-medium text-zinc-900 transition-colors hover:border-zinc-400 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-900"
           >
             Créer un compte
-          </a>
+          </Link>
         </div>
       </div>
     </main>

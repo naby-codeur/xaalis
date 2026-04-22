@@ -8,9 +8,19 @@ import {
   computeExpiry,
 } from "auth";
 import { prisma } from "db";
-import type { LoginInput, RegisterInput, Role } from "shared";
+import {
+  ROLES,
+  type AuthenticatedUser,
+  type LoginInput,
+  type RegisterInput,
+  type Role,
+} from "shared";
 
 import { env } from "../config/env";
+
+/** Identité synthétique quand `DEV_AUTH_BYPASS` est actif (aucune ligne en base). */
+export const DEV_BYPASS_USER_ID = "00000000-0000-4000-8000-000000000001";
+export const DEV_BYPASS_ORG_ID = "00000000-0000-4000-8000-000000000002";
 
 const jwtConfig = {
   accessSecret: env.JWT_ACCESS_SECRET,
@@ -99,6 +109,79 @@ export async function logout(userId: string, sessionId: string) {
     where: { id: sessionId, userId, revokedAt: null },
     data: { revokedAt: new Date() },
   });
+}
+
+export function issueDevBypassSession() {
+  if (env.NODE_ENV !== "development" || !env.DEV_AUTH_BYPASS) {
+    throw Object.assign(new Error("Dev login is disabled"), { statusCode: 403 });
+  }
+
+  const accessToken = signAccessToken(
+    {
+      sub: DEV_BYPASS_USER_ID,
+      organizationId: DEV_BYPASS_ORG_ID,
+      role: ROLES.ADMIN,
+    },
+    jwtConfig,
+  );
+
+  const user: AuthenticatedUser = {
+    id: DEV_BYPASS_USER_ID,
+    email: "dev@local.test",
+    name: "Utilisateur dev",
+    createdAt: new Date(0).toISOString(),
+    organizationId: DEV_BYPASS_ORG_ID,
+    role: ROLES.ADMIN,
+  };
+
+  return {
+    accessToken,
+    refreshToken: "",
+    user,
+  };
+}
+
+export async function resolveAuthenticatedUser(jwtUser: {
+  id: string;
+  organizationId: string;
+  role: Role;
+}): Promise<AuthenticatedUser> {
+  if (
+    env.NODE_ENV === "development" &&
+    env.DEV_AUTH_BYPASS &&
+    jwtUser.id === DEV_BYPASS_USER_ID
+  ) {
+    return {
+      id: DEV_BYPASS_USER_ID,
+      email: "dev@local.test",
+      name: "Utilisateur dev",
+      createdAt: new Date(0).toISOString(),
+      organizationId: DEV_BYPASS_ORG_ID,
+      role: ROLES.ADMIN,
+    };
+  }
+
+  const row = await prisma.user.findUnique({
+    where: { id: jwtUser.id },
+    include: { memberships: { include: { organization: true } } },
+  });
+
+  if (row) {
+    const membership = row.memberships[0];
+    if (!membership) {
+      throw Object.assign(new Error("No organization"), { statusCode: 403 });
+    }
+    return {
+      id: row.id,
+      email: row.email,
+      name: row.name,
+      createdAt: row.createdAt.toISOString(),
+      organizationId: membership.organizationId,
+      role: membership.role as Role,
+    };
+  }
+
+  throw Object.assign(new Error("User not found"), { statusCode: 404 });
 }
 
 async function issueTokens(

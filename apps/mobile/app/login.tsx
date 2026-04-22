@@ -1,76 +1,96 @@
 import { useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
 import { Link, router } from "expo-router";
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { useAuth } from "@/src/hooks/useAuth";
 
 export default function LoginScreen() {
-  const { login, loading, error } = useAuth();
+  const { login, devLogin, loading, error } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const enableDevBypass =
+    process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS === "1" ||
+    process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS?.toLowerCase() === "true";
 
   async function handleSubmit() {
     try {
       await login(email, password);
       router.replace("/dashboard");
     } catch {
-      // L'erreur est d\u00e9j\u00e0 dans `error`.
+      // L'erreur est deja dans `error`.
+    }
+  }
+
+  async function handleDevLogin() {
+    try {
+      await devLogin();
+      router.replace("/dashboard");
+    } catch {
+      // L'erreur est deja dans `error`.
     }
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Xaliss Manager</Text>
-      <Text style={styles.subtitle}>Connectez-vous \u00e0 votre compte</Text>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Xaliss Manager</Text>
+        <Text style={styles.subtitle}>Connectez-vous a votre compte</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Mot de passe"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          autoCapitalize="none"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Mot de passe"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <Pressable
-        style={[styles.button, loading && styles.buttonDisabled]}
-        onPress={handleSubmit}
-        disabled={loading}
-      >
-        <Text style={styles.buttonText}>
-          {loading ? "Connexion\u2026" : "Se connecter"}
-        </Text>
-      </Pressable>
+        <Pressable
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Connexion..." : "Se connecter"}
+          </Text>
+        </Pressable>
 
-      <Link href="/register" style={styles.link}>
-        Cr\u00e9er un compte
-      </Link>
-    </View>
+        {enableDevBypass ? (
+          <Pressable
+            style={[styles.devButton, loading && styles.buttonDisabled]}
+            onPress={handleDevLogin}
+            disabled={loading}
+          >
+            <Text style={styles.devButtonText}>Entrer en mode dev</Text>
+          </Pressable>
+        ) : null}
+
+        <Link href="/register" style={styles.link}>
+          Creer un compte
+        </Link>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    justifyContent: "center",
-    gap: 12,
+  scrollContent: {
+    flexGrow: 1,
     backgroundColor: "#fff",
+    justifyContent: "center",
+  },
+  container: {
+    padding: 24,
+    gap: 12,
   },
   title: {
     fontSize: 28,
@@ -97,6 +117,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 8,
+  },
+  devButton: {
+    borderWidth: 1,
+    borderStyle: "dashed",
+    borderColor: "#a1a1aa",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  devButtonText: {
+    color: "#27272a",
+    fontSize: 14,
+    fontWeight: "500",
   },
   buttonDisabled: {
     opacity: 0.6,

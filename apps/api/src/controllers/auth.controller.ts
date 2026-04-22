@@ -17,7 +17,18 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 }
 
 export async function me(request: FastifyRequest, reply: FastifyReply) {
-  return reply.send(request.user);
+  const jwtUser = request.user!;
+  const profile = await authService.resolveAuthenticatedUser({
+    id: jwtUser.id,
+    organizationId: jwtUser.organizationId,
+    role: jwtUser.role,
+  });
+  return reply.send(profile);
+}
+
+export async function devLogin(request: FastifyRequest, reply: FastifyReply) {
+  const result = authService.issueDevBypassSession();
+  return reply.send(result);
 }
 
 export async function logout(request: FastifyRequest, reply: FastifyReply) {
