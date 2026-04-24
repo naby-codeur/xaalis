@@ -1,6 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
+<<<<<<< HEAD
 import { loginSchema, refreshSchema, registerSchema } from "shared";
+=======
+import { loginSchema, registerSchema } from "shared";
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 
 import * as authService from "../services/auth.service";
 
@@ -31,12 +35,15 @@ export async function devLogin(request: FastifyRequest, reply: FastifyReply) {
   return reply.send(result);
 }
 
+<<<<<<< HEAD
 export async function refresh(request: FastifyRequest, reply: FastifyReply) {
   const input = refreshSchema.parse(request.body ?? {});
   const result = await authService.refresh(input.refreshToken);
   return reply.send(result);
 }
 
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 export async function logout(request: FastifyRequest, reply: FastifyReply) {
   return reply.send({ ok: true });
 }

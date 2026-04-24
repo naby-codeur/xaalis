@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { Redirect } from "expo-router";
@@ -33,4 +34,10 @@ export default function IndexScreen() {
   }
 
   return <Redirect href={target} />;
+=======
+import { Redirect } from "expo-router";
+
+export default function IndexScreen() {
+  return <Redirect href="/login" />;
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 }

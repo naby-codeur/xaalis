@@ -15,7 +15,11 @@ export default function LoginScreen() {
   async function handleSubmit() {
     try {
       await login(email, password);
+<<<<<<< HEAD
       router.replace("/(app)/(tabs)/dashboard");
+=======
+      router.replace("/dashboard");
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     } catch {
       // L'erreur est deja dans `error`.
     }
@@ -24,7 +28,11 @@ export default function LoginScreen() {
   async function handleDevLogin() {
     try {
       await devLogin();
+<<<<<<< HEAD
       router.replace("/(app)/(tabs)/dashboard");
+=======
+      router.replace("/dashboard");
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     } catch {
       // L'erreur est deja dans `error`.
     }

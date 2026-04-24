@@ -5,6 +5,7 @@ const expoConfig = require('eslint-config-expo/flat');
 module.exports = defineConfig([
   expoConfig,
   {
+<<<<<<< HEAD
     settings: {
       "import/resolver": {
         typescript: {
@@ -17,6 +18,8 @@ module.exports = defineConfig([
     },
   },
   {
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     ignores: ['dist/*'],
   },
 ]);

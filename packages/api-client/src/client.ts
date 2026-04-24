@@ -1,7 +1,11 @@
 export interface ApiClientOptions {
   baseUrl: string;
   getAccessToken?: () => string | null | Promise<string | null>;
+<<<<<<< HEAD
   onUnauthorized?: () => boolean | Promise<boolean>;
+=======
+  onUnauthorized?: () => void | Promise<void>;
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
   credentials?: RequestCredentials;
 }
 
@@ -31,7 +35,10 @@ export class ApiClient {
     path: string,
     body?: unknown,
     init?: RequestInit,
+<<<<<<< HEAD
     canRetry = true,
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
   ): Promise<T> {
     const headers = new Headers(init?.headers);
     headers.set("Accept", "application/json");
@@ -55,10 +62,14 @@ export class ApiClient {
     });
 
     if (response.status === 401 && this.options.onUnauthorized) {
+<<<<<<< HEAD
       const recovered = await this.options.onUnauthorized();
       if (recovered && canRetry) {
         return this.request<T>(method, path, body, init, false);
       }
+=======
+      await this.options.onUnauthorized();
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     }
 
     const text = await response.text();

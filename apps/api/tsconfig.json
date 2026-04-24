@@ -3,6 +3,11 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
+<<<<<<< HEAD
+=======
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     "target": "ES2022",
     "types": ["node"]
   },

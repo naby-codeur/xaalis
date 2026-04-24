@@ -44,6 +44,7 @@ pnpm --filter web dev
 pnpm --filter mobile start
 ```
 
+<<<<<<< HEAD
 ## Onboarding rapide (< 1 jour)
 
 ```bash
@@ -61,6 +62,8 @@ pnpm --filter web dev
 pnpm --filter mobile start
 ```
 
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 ## Scripts racine
 
 | Script | Effet |
@@ -69,6 +72,7 @@ pnpm --filter mobile start
 | `pnpm build` | Build de toutes les apps/packages |
 | `pnpm lint` | Lint du monorepo |
 | `pnpm typecheck` | Vérification TypeScript |
+<<<<<<< HEAD
 | `pnpm test` | Exécution des tests disponibles |
 
 ## Qualité / CI
@@ -96,6 +100,8 @@ pnpm build
 - **API**: chaque réponse d'erreur inclut `requestId` + header `x-request-id`.
 - **Web**: `global-error.tsx` journalise les erreurs globales côté client (`console.error`) comme point d'intégration pour Sentry.
 - **Secrets observabilité**: placeholders `SENTRY_DSN_API` et `SENTRY_DSN_WEB` dans `.env.example`.
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 
 ## Ordre de développement
 

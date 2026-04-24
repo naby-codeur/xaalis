@@ -739,6 +739,7 @@ flowchart LR
 | **Définition de terminé** | Build développement mobile OK ; parcours login → dashboard sur device ou simulateur ; aucun secret serveur dans l’app. |
 | **Risque principal** | Mauvaise gestion du refresh / 401 en cascade. |
 
+<<<<<<< HEAD
 **Décisions attendues avant démarrage**
 
 - **Inscription mobile :** confirmer si l’inscription est in-app (`/register` mobile) ou redirection vers URL web publique.
@@ -781,6 +782,8 @@ flowchart LR
 - Tests minimaux ajoutés sur la couche auth (au moins unitaires sur logique refresh).
 - Build de dev validé (`expo start`) + un build preview (EAS ou alternative choisie).
 
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 ### 17.12 Étape 9 — Parité de navigation mobile
 
 | | |
@@ -804,6 +807,7 @@ flowchart LR
 | | |
 | --- | --- |
 | **Objectif** | Préparer la phase 6 de la roadmap sans l’exiger pour clore la v0.1.0. |
+<<<<<<< HEAD
 | **Actions** | Formaliser le backlog scale dans `docs/scale-backlog.md` avec priorisation `P0/P1/P2`, lotissement recommandé, et template standard (Objectif / Actions / Definition of Ready / Definition of Done / Risque / Dépendances / Estimation). |
 | **Définition de terminé** | Backlog priorisé et validé métier ; pas d’implémentation obligatoire pour la version document 0.1.0. |
 | **Risque principal** | Scope creep — garder la v0.1.0 livrable avant d’ouvrir ces chantiers. |
@@ -815,6 +819,12 @@ flowchart LR
 - Des critères **Ready** / **Done** explicites pour ouvrir/fermer chaque chantier.
 - Aucune implémentation technique obligatoire sur `apps/*` et `packages/*` pour valider cette étape.
 
+=======
+| **Actions** | Backlog : cache Redis, notifications push, offline partiel, IA ; chaque item = future **étape** avec même structure (objectif / actions / DoD / risque). |
+| **Définition de terminé** | Backlog priorisé et validé métier ; pas d’implémentation obligatoire pour la version document 0.1.0. |
+| **Risque principal** | Scope creep — garder la v0.1.0 livrable avant d’ouvrir ces chantiers. |
+
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 ---
 
 *Document v0.1.0 — inclut notamment le shell web (sidebar / navbar, APIs transverses) et les exigences mobile (login-first, lien inscription).*

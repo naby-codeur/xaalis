@@ -4,6 +4,10 @@ generator client {
 
 datasource db {
   provider = "mongodb"
+<<<<<<< HEAD
+=======
+  url      = env("DATABASE_URL")
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 }
 
 enum Role {

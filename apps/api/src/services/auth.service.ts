@@ -3,7 +3,10 @@ import {
   hashPassword,
   signAccessToken,
   signRefreshToken,
+<<<<<<< HEAD
   verifyRefreshToken,
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
   hashRefreshToken,
   generateSessionId,
   computeExpiry,
@@ -34,7 +37,11 @@ function ttlToSeconds(ttl: string): number {
   const match = /^(\d+)([smhd])$/.exec(ttl);
   if (!match) return 60 * 60 * 24 * 30;
   const value = Number(match[1]);
+<<<<<<< HEAD
   const unit = match[2] as "s" | "m" | "h" | "d";
+=======
+  const unit = match[2];
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
   const factors: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86400 };
   return value * (factors[unit] ?? 1);
 }
@@ -105,6 +112,7 @@ export async function login(input: LoginInput) {
   });
 }
 
+<<<<<<< HEAD
 export async function refresh(rawRefreshToken?: string) {
   const refreshToken = rawRefreshToken?.trim();
   if (!refreshToken) {
@@ -175,6 +183,8 @@ export async function refresh(rawRefreshToken?: string) {
   };
 }
 
+=======
+>>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 export async function logout(userId: string, sessionId: string) {
   await prisma.session.updateMany({
     where: { id: sessionId, userId, revokedAt: null },
