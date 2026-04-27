@@ -1,20 +1,20 @@
 import { ApiClient, createEndpoints } from "api-client";
 
-<<<<<<< HEAD
-import { getAccessToken, getRefreshToken, saveTokens, clearTokens } from "./secure-store";
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveTokens,
+  clearTokens,
+} from "./secure-store";
 import { resetAuth, setAuthenticatedUser } from "../store/auth.store";
 import {
   createUnauthorizedHandler,
   refreshSessionWithDeps,
 } from "./auth-session";
-=======
-import { getAccessToken } from "./secure-store";
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 
 const baseUrl =
   process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:4000";
 
-<<<<<<< HEAD
 function createRefreshSession(): Promise<boolean> {
   return refreshSessionWithDeps({
     getRefreshToken,
@@ -31,17 +31,42 @@ const handleUnauthorized = createUnauthorizedHandler({
   resetAuth,
 });
 
-=======
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 export const apiClient = new ApiClient({
   baseUrl,
   credentials: "omit",
   getAccessToken,
-<<<<<<< HEAD
   onUnauthorized: handleUnauthorized,
 });
 
 export const api = createEndpoints(apiClient);
+
+const enableDevBypass =
+  process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS === "1" ||
+  process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS?.toLowerCase() === "true";
+
+/**
+ * Sans tokens : si bypass dev actif, obtient une session via `POST /v1/auth/dev-login`.
+ */
+export async function tryAutoDevBypassLogin(): Promise<boolean> {
+  if (!enableDevBypass) return false;
+  try {
+    const result = await apiClient.request<{
+      accessToken: string;
+      refreshToken?: string;
+      user: Parameters<typeof setAuthenticatedUser>[0];
+    }>("POST", "/v1/auth/dev-login");
+    await saveTokens({
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken?.trim()
+        ? result.refreshToken
+        : null,
+    });
+    setAuthenticatedUser(result.user);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export async function initializeAuthSession(): Promise<boolean> {
   const accessToken = await getAccessToken();
@@ -73,8 +98,3 @@ export async function clearAuthSession(): Promise<void> {
   await clearTokens();
   resetAuth();
 }
-=======
-});
-
-export const api = createEndpoints(apiClient);
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7

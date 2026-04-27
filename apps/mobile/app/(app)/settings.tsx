@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { clearAuthSession } from "@/src/services/api";
@@ -9,7 +8,6 @@ export default function SettingsScreen() {
 
   async function handleLogout() {
     await clearAuthSession();
-    router.replace("/login");
   }
 
   return (

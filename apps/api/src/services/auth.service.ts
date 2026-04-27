@@ -3,16 +3,15 @@ import {
   hashPassword,
   signAccessToken,
   signRefreshToken,
-<<<<<<< HEAD
   verifyRefreshToken,
-=======
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
   hashRefreshToken,
   generateSessionId,
   computeExpiry,
 } from "auth";
 import { prisma } from "db";
 import {
+  DEV_BYPASS_ORG_ID,
+  DEV_BYPASS_USER_ID,
   ROLES,
   type AuthenticatedUser,
   type LoginInput,
@@ -21,10 +20,6 @@ import {
 } from "shared";
 
 import { env } from "../config/env";
-
-/** Identité synthétique quand `DEV_AUTH_BYPASS` est actif (aucune ligne en base). */
-export const DEV_BYPASS_USER_ID = "00000000-0000-4000-8000-000000000001";
-export const DEV_BYPASS_ORG_ID = "00000000-0000-4000-8000-000000000002";
 
 const jwtConfig = {
   accessSecret: env.JWT_ACCESS_SECRET,
@@ -37,11 +32,7 @@ function ttlToSeconds(ttl: string): number {
   const match = /^(\d+)([smhd])$/.exec(ttl);
   if (!match) return 60 * 60 * 24 * 30;
   const value = Number(match[1]);
-<<<<<<< HEAD
   const unit = match[2] as "s" | "m" | "h" | "d";
-=======
-  const unit = match[2];
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
   const factors: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86400 };
   return value * (factors[unit] ?? 1);
 }
@@ -112,7 +103,6 @@ export async function login(input: LoginInput) {
   });
 }
 
-<<<<<<< HEAD
 export async function refresh(rawRefreshToken?: string) {
   const refreshToken = rawRefreshToken?.trim();
   if (!refreshToken) {
@@ -183,8 +173,6 @@ export async function refresh(rawRefreshToken?: string) {
   };
 }
 
-=======
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 export async function logout(userId: string, sessionId: string) {
   await prisma.session.updateMany({
     where: { id: sessionId, userId, revokedAt: null },

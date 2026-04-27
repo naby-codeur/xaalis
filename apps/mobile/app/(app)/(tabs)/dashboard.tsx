@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { router } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import type { MetricsResponse } from "shared";
 
@@ -48,7 +47,9 @@ export default function DashboardScreen() {
 
   async function handleLogout() {
     await clearAuthSession();
-    router.replace("/login");
+    setData(fallbackOverviewMetrics);
+    setSource("mock");
+    setError("Session effacee localement");
   }
 
   return (

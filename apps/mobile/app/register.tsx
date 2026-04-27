@@ -19,11 +19,7 @@ export default function RegisterScreen() {
         email,
         password,
       });
-<<<<<<< HEAD
       router.replace("/(app)/(tabs)/dashboard");
-=======
-      router.replace("/dashboard");
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     } catch {
       // L'erreur est deja dans `error`.
     }

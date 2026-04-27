@@ -1,25 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, router } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { useAuth } from "@/src/hooks/useAuth";
+import { tryAutoDevBypassLogin } from "@/src/services/api";
+
+const enableDevBypass =
+  process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS === "1" ||
+  process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS?.toLowerCase() === "true";
 
 export default function LoginScreen() {
   const { login, devLogin, loading, error } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const enableDevBypass =
-    process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS === "1" ||
-    process.env.EXPO_PUBLIC_DEV_AUTH_BYPASS?.toLowerCase() === "true";
+  const [devAutoPending, setDevAutoPending] = useState(enableDevBypass);
+
+  useEffect(() => {
+    if (!enableDevBypass) return;
+    let mounted = true;
+    void (async () => {
+      const ok = await tryAutoDevBypassLogin();
+      if (!mounted) return;
+      if (ok) {
+        router.replace("/(app)/(tabs)/dashboard");
+        return;
+      }
+      setDevAutoPending(false);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   async function handleSubmit() {
     try {
       await login(email, password);
-<<<<<<< HEAD
       router.replace("/(app)/(tabs)/dashboard");
-=======
-      router.replace("/dashboard");
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     } catch {
       // L'erreur est deja dans `error`.
     }
@@ -28,11 +52,7 @@ export default function LoginScreen() {
   async function handleDevLogin() {
     try {
       await devLogin();
-<<<<<<< HEAD
       router.replace("/(app)/(tabs)/dashboard");
-=======
-      router.replace("/dashboard");
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
     } catch {
       // L'erreur est deja dans `error`.
     }

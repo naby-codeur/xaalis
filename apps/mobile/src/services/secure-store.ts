@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import * as SecureStore from "expo-secure-store";
 
 const ACCESS_TOKEN_KEY = "xaalis.accessToken";
@@ -57,16 +56,3 @@ export async function saveTokens(input: {
 export async function clearTokens(): Promise<void> {
   await saveTokens({ accessToken: null, refreshToken: null });
 }
-=======
-let cachedAccessToken: string | null = null;
-
-export function getAccessToken(): string | null {
-  return cachedAccessToken;
-}
-
-export function setAccessToken(token: string | null): void {
-  cachedAccessToken = token;
-}
-
-// TODO: remplacer par expo-secure-store pour le refresh token.
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7

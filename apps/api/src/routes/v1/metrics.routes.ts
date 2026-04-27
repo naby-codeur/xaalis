@@ -18,7 +18,6 @@ export default async function metricsRoutes(app: FastifyInstance) {
     },
     metricsController.overview,
   );
-<<<<<<< HEAD
   app.get(
     "/metrics/cashflow",
     {
@@ -52,6 +51,4 @@ export default async function metricsRoutes(app: FastifyInstance) {
     },
     metricsController.team,
   );
-=======
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 }

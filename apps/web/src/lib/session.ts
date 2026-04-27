@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { cache } from "react";
 
-import type { AuthenticatedUser } from "shared";
+import { getDevBypassAuthenticatedUser, type AuthenticatedUser } from "shared";
 
 import { getApiBaseUrl } from "./server-api";
 
@@ -10,7 +9,7 @@ export const getSessionUser = cache(async (): Promise<AuthenticatedUser> => {
   const jar = await cookies();
   const token = jar.get("access_token")?.value;
   if (!token) {
-    redirect("/login");
+    return getDevBypassAuthenticatedUser();
   }
 
   const res = await fetch(`${getApiBaseUrl()}/v1/auth/me`, {
@@ -19,7 +18,7 @@ export const getSessionUser = cache(async (): Promise<AuthenticatedUser> => {
   });
 
   if (!res.ok) {
-    redirect("/login");
+    return getDevBypassAuthenticatedUser();
   }
 
   return res.json() as Promise<AuthenticatedUser>;

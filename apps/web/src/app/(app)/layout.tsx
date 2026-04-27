@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SidebarNav } from "@/components/app/sidebar-nav";
 import { LogoutButton } from "@/components/logout-button";
 import { getSessionUser } from "@/lib/session";
 
@@ -22,17 +23,7 @@ export default async function AppLayout({
         >
           Xaliss Manager
         </Link>
-        <nav className="flex flex-col gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.key}
-              href={item.web!.path}
-              className="rounded-lg px-3 py-2 text-sm text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-900"
-            >
-              {item.key}
-            </Link>
-          ))}
-        </nav>
+        <SidebarNav items={navItems} />
       </aside>
 
       <div className="flex min-h-full flex-1 flex-col">

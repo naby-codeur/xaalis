@@ -1,11 +1,7 @@
 import { useCallback, useState } from "react";
 
-import { api, apiClient } from "../services/api";
-<<<<<<< HEAD
+import { api, tryAutoDevBypassLogin } from "../services/api";
 import { saveTokens } from "../services/secure-store";
-=======
-import { setAccessToken } from "../services/secure-store";
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 import { setAuthenticatedUser } from "../store/auth.store";
 
 export function useAuth() {
@@ -13,7 +9,6 @@ export function useAuth() {
   const [error, setError] = useState<string | null>(null);
 
   const commitAuth = useCallback(
-<<<<<<< HEAD
     async (result: {
       accessToken: string;
       refreshToken?: string;
@@ -23,10 +18,6 @@ export function useAuth() {
         accessToken: result.accessToken,
         refreshToken: result.refreshToken ?? null,
       });
-=======
-    (result: { accessToken: string; user: Parameters<typeof setAuthenticatedUser>[0] }) => {
-      setAccessToken(result.accessToken);
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
       setAuthenticatedUser(result.user);
       return result;
     },
@@ -39,11 +30,7 @@ export function useAuth() {
       setError(null);
       try {
         const result = await api.auth.login({ email, password });
-<<<<<<< HEAD
         return await commitAuth(result);
-=======
-        return commitAuth(result);
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
       } catch (err) {
         setError(err instanceof Error ? err.message : "Login failed");
         throw err;
@@ -65,11 +52,7 @@ export function useAuth() {
       setError(null);
       try {
         const result = await api.auth.register(input);
-<<<<<<< HEAD
         return await commitAuth(result);
-=======
-        return commitAuth(result);
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
       } catch (err) {
         setError(err instanceof Error ? err.message : "Register failed");
         throw err;
@@ -84,25 +67,15 @@ export function useAuth() {
     setLoading(true);
     setError(null);
     try {
-      const result = await apiClient.request<{
-        accessToken: string;
-<<<<<<< HEAD
-        refreshToken?: string;
-        user: Parameters<typeof setAuthenticatedUser>[0];
-      }>("POST", "/v1/auth/dev-login");
-      return await commitAuth(result);
-=======
-        user: Parameters<typeof setAuthenticatedUser>[0];
-      }>("POST", "/v1/auth/dev-login");
-      return commitAuth(result);
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
+      const ok = await tryAutoDevBypassLogin();
+      if (!ok) throw new Error("Dev login failed");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Dev login failed");
       throw err;
     } finally {
       setLoading(false);
     }
-  }, [commitAuth]);
+  }, []);
 
   return { login, register, devLogin, loading, error };
 }

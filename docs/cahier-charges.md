@@ -739,7 +739,6 @@ flowchart LR
 | **Définition de terminé** | Build développement mobile OK ; parcours login → dashboard sur device ou simulateur ; aucun secret serveur dans l’app. |
 | **Risque principal** | Mauvaise gestion du refresh / 401 en cascade. |
 
-<<<<<<< HEAD
 **Décisions attendues avant démarrage**
 
 - **Inscription mobile :** confirmer si l’inscription est in-app (`/register` mobile) ou redirection vers URL web publique.
@@ -782,8 +781,6 @@ flowchart LR
 - Tests minimaux ajoutés sur la couche auth (au moins unitaires sur logique refresh).
 - Build de dev validé (`expo start`) + un build preview (EAS ou alternative choisie).
 
-=======
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
 ### 17.12 Étape 9 — Parité de navigation mobile
 
 | | |
@@ -807,7 +804,6 @@ flowchart LR
 | | |
 | --- | --- |
 | **Objectif** | Préparer la phase 6 de la roadmap sans l’exiger pour clore la v0.1.0. |
-<<<<<<< HEAD
 | **Actions** | Formaliser le backlog scale dans `docs/scale-backlog.md` avec priorisation `P0/P1/P2`, lotissement recommandé, et template standard (Objectif / Actions / Definition of Ready / Definition of Done / Risque / Dépendances / Estimation). |
 | **Définition de terminé** | Backlog priorisé et validé métier ; pas d’implémentation obligatoire pour la version document 0.1.0. |
 | **Risque principal** | Scope creep — garder la v0.1.0 livrable avant d’ouvrir ces chantiers. |
@@ -819,12 +815,20 @@ flowchart LR
 - Des critères **Ready** / **Done** explicites pour ouvrir/fermer chaque chantier.
 - Aucune implémentation technique obligatoire sur `apps/*` et `packages/*` pour valider cette étape.
 
-=======
-| **Actions** | Backlog : cache Redis, notifications push, offline partiel, IA ; chaque item = future **étape** avec même structure (objectif / actions / DoD / risque). |
-| **Définition de terminé** | Backlog priorisé et validé métier ; pas d’implémentation obligatoire pour la version document 0.1.0. |
-| **Risque principal** | Scope creep — garder la v0.1.0 livrable avant d’ouvrir ces chantiers. |
+### 17.15 Note — implémentation actuelle (mode développement, v0.1.0)
 
->>>>>>> f83ab1a772188044adad3cd39c72a329ac1d0bf7
+Cette section trace l’**écart contrôlé** entre le cahier cible et le dépôt **au jour de la rédaction**, pour éviter toute ambiguïité lors des revues (notamment web / mobile / API).
+
+| Domaine | État dans le dépôt | Commentaire |
+| --- | --- | --- |
+| **Auth & données** | Auth API + session web (cookies) / Bearer mobile ; données métier encore **mock ou partielles** selon route | Pas d’exigence de base de données production complète pour la v0.1.0 document ; les scénarios sensibles (RBAC strict, fuite inter-tenant) restent à durcir avant mise en prod. |
+| **Shell web** | Layout `(app)` : sidebar issue de `packages/shared` (`MENU_ITEMS`), en-tête (email, rôle, déconnexion) | Pages métier sous `(app)/…` : certaines sont **placeholders** ; rapports peuvent illustrer les métriques via l’API en dev. |
+| **Navigation web** | Libellés sidebar en français + **lien actif** (route courante) | Alignement visuel avec le menu partagé ; i18n par `labelKey` pourra remplacer le mapping local quand le catalogue de traductions sera branché. |
+| **Mobile** | Tabs + drawer (config partagée) ; garde **`(app)`** ; **`EXPO_PUBLIC_DEV_AUTH_BYPASS`** : `tryAutoDevBypassLogin` sur l’index, au montage de **`/login`**, et dans le layout **`(app)`** (accès dashboard sans saisie si l’API `dev-login` répond) | Même principe que le web en dev ; production inchangée (pas de bypass). |
+| **Métriques API** | Endpoints dédiés (ex. trésorerie, projets, équipe) **réutilisent pour l’instant le même agrégat que l’overview** | Documenté en commentaire côté `apps/api` ; à remplacer par des requêtes / schémas distincts quand le métier le précise. |
+| **Qualité** | Pipeline CI racine (install → lint → typecheck → test → build) | Voir `README.md` racine ; Sentry ou équivalent peut suivre selon étape 10. |
+| **Scale** | Backlog hors périmètre minimal : `docs/scale-backlog.md` | Référence croisée § 17.14. |
+
 ---
 
 *Document v0.1.0 — inclut notamment le shell web (sidebar / navbar, APIs transverses) et les exigences mobile (login-first, lien inscription).*
