@@ -1,4 +1,4 @@
-# Xaliss Manager
+# Xaalis
 
 Plateforme SaaS de gestion financière pour ONG, associations, PME, coopératives et structures multi-projets.
 

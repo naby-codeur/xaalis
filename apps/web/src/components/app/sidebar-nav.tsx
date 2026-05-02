@@ -3,18 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { NavIcon } from "@/components/app/nav-icon";
+
 import type { MenuItem } from "shared";
 
 const NAV_LABELS: Record<string, string> = {
   dashboard: "Tableau de bord",
-  transactions: "Transactions",
+  members: "Membres",
+  contributions: "Cotisations",
+  income: "Revenus",
+  expenses: "Dépenses",
   projects: "Projets",
   reports: "Rapports",
   team: "Équipe",
   settings: "Paramètres",
 };
 
-export function SidebarNav({ items }: { items: readonly MenuItem[] }) {
+export function SidebarNav({
+  items,
+  collapsed = false,
+}: {
+  items: readonly MenuItem[];
+  collapsed?: boolean;
+}) {
   const pathname = usePathname();
 
   return (
@@ -27,13 +38,21 @@ export function SidebarNav({ items }: { items: readonly MenuItem[] }) {
           <Link
             key={item.key}
             href={href}
-            className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+            title={collapsed ? label : undefined}
+            className={`group flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+              collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2.5"
+            } ${
               active
-                ? "bg-zinc-900 font-medium text-white dark:bg-zinc-100 dark:text-zinc-900"
-                : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-900"
+                ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/25 dark:from-violet-500 dark:to-indigo-500 dark:shadow-violet-900/40"
+                : "text-zinc-600 hover:bg-violet-50/90 hover:text-violet-950 dark:text-zinc-400 dark:hover:bg-zinc-800/90 dark:hover:text-zinc-100"
             }`}
           >
-            {label}
+            <NavIcon name={item.icon} className={active ? "text-current" : undefined} />
+            {collapsed ? (
+              <span className="sr-only">{label}</span>
+            ) : (
+              <span className="truncate">{label}</span>
+            )}
           </Link>
         );
       })}

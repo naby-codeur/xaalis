@@ -74,13 +74,14 @@ export async function register(input: RegisterInput) {
     email: user.email,
     name: user.name,
     createdAt: user.createdAt.toISOString(),
+    organizationLogoUrl: membership.organization.logoUrl ?? null,
   });
 }
 
 export async function login(input: LoginInput) {
   const user = await prisma.user.findUnique({
     where: { email: input.email },
-    include: { memberships: true },
+    include: { memberships: { include: { organization: true } } },
   });
   if (!user) {
     throw Object.assign(new Error("Invalid credentials"), { statusCode: 401 });
@@ -100,6 +101,7 @@ export async function login(input: LoginInput) {
     email: user.email,
     name: user.name,
     createdAt: user.createdAt.toISOString(),
+    organizationLogoUrl: membership.organization.logoUrl ?? null,
   });
 }
 
@@ -135,7 +137,7 @@ export async function refresh(rawRefreshToken?: string) {
 
   const user = await prisma.user.findUnique({
     where: { id: session.userId },
-    include: { memberships: true },
+    include: { memberships: { include: { organization: true } } },
   });
   if (!user) {
     throw Object.assign(new Error("User not found"), { statusCode: 404 });
@@ -169,6 +171,7 @@ export async function refresh(rawRefreshToken?: string) {
       createdAt: user.createdAt.toISOString(),
       organizationId: membership.organizationId,
       role: membership.role as Role,
+      organizationLogoUrl: membership.organization.logoUrl ?? null,
     },
   };
 }
@@ -201,6 +204,7 @@ export function issueDevBypassSession() {
     createdAt: new Date(0).toISOString(),
     organizationId: DEV_BYPASS_ORG_ID,
     role: ROLES.ADMIN,
+    organizationLogoUrl: null,
   };
 
   return {
@@ -227,6 +231,7 @@ export async function resolveAuthenticatedUser(jwtUser: {
       createdAt: new Date(0).toISOString(),
       organizationId: DEV_BYPASS_ORG_ID,
       role: ROLES.ADMIN,
+      organizationLogoUrl: null,
     };
   }
 
@@ -247,6 +252,7 @@ export async function resolveAuthenticatedUser(jwtUser: {
       createdAt: row.createdAt.toISOString(),
       organizationId: membership.organizationId,
       role: membership.role as Role,
+      organizationLogoUrl: membership.organization.logoUrl ?? null,
     };
   }
 
@@ -257,7 +263,12 @@ async function issueTokens(
   userId: string,
   organizationId: string,
   role: Role,
-  profile: { email: string; name: string | null; createdAt: string },
+  profile: {
+    email: string;
+    name: string | null;
+    createdAt: string;
+    organizationLogoUrl?: string | null;
+  },
 ) {
   const sessionId = generateSessionId();
   const accessToken = signAccessToken(
@@ -287,8 +298,32 @@ async function issueTokens(
       createdAt: profile.createdAt,
       organizationId,
       role,
+      organizationLogoUrl: profile.organizationLogoUrl ?? null,
     },
   };
+}
+
+export async function getOrganizationLogo(organizationId: string) {
+  const organization = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { logoUrl: true },
+  });
+  if (!organization) {
+    throw Object.assign(new Error("Organization not found"), { statusCode: 404 });
+  }
+  return { logoUrl: organization.logoUrl ?? null };
+}
+
+export async function updateOrganizationLogo(input: {
+  organizationId: string;
+  logoUrl: string | null;
+}) {
+  const updated = await prisma.organization.update({
+    where: { id: input.organizationId },
+    data: { logoUrl: input.logoUrl },
+    select: { logoUrl: true },
+  });
+  return { logoUrl: updated.logoUrl ?? null };
 }
 
 function slugify(input: string): string {

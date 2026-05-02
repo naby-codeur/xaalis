@@ -1,4 +1,4 @@
-Voici une **structure propre, professionnelle et maintenable** pour le monorepo **Xaliss Manager**.
+Voici une **structure propre, professionnelle et maintenable** pour le monorepo **Xaalis**.
 Elle respecte ce que tu as décrit dans ton cahier des charges : **Web + API + Mobile + packages partagés**.
 
 Je vais te montrer :
@@ -9,7 +9,7 @@ Je vais te montrer :
 
 ---
 
-# Structure complète du monorepo Xaliss Manager
+# Structure complète du monorepo Xaalis
 
 ```text
 xaalis/
@@ -30,7 +30,7 @@ xaalis/
 │ │ │ │ │
 │ │ │ │ ├ (dashboard)/       # Zone SaaS
 │ │ │ │ │ ├ dashboard/
-│ │ │ │ │ ├ transactions/
+│ │ │ │ │ ├ contributions/
 │ │ │ │ │ ├ projects/
 │ │ │ │ │ ├ reports/
 │ │ │ │ │ ├ team/
@@ -70,18 +70,18 @@ xaalis/
 │ │ │ ├ routes/
 │ │ │ │ ├ auth.routes.ts
 │ │ │ │ ├ users.routes.ts
-│ │ │ │ ├ transactions.routes.ts
+│ │ │ │ ├ contributions.routes.ts
 │ │ │ │ ├ projects.routes.ts
 │ │ │ │ └ metrics.routes.ts
 │ │ │ │
 │ │ │ ├ services/
 │ │ │ │ ├ auth.service.ts
-│ │ │ │ ├ transaction.service.ts
+│ │ │ │ ├ contributions.service.ts
 │ │ │ │ └ metrics.service.ts
 │ │ │ │
 │ │ │ ├ controllers/
 │ │ │ │ ├ auth.controller.ts
-│ │ │ │ ├ transaction.controller.ts
+│ │ │ │ ├ contributions.controller.ts
 │ │ │ │ └ metrics.controller.ts
 │ │ │ │
 │ │ │ ├ middleware/
@@ -111,7 +111,7 @@ xaalis/
 │   ├ src/
 │   │ ├ components/
 │   │ ├ screens/
-│   │ │ ├ transactions/
+│   │ │ ├ contributions/
 │   │ │ ├ projects/
 │   │ │ └ profile/
 │   │ │
@@ -149,7 +149,7 @@ xaalis/
 │ │ │ ├ types/
 │ │ │ │ ├ user.ts
 │ │ │ │ ├ organization.ts
-│ │ │ │ └ transaction.ts
+│ │ │ │ └ contribution.ts
 │ │ │ │
 │ │ │ ├ schemas/
 │ │ │ │ ├ auth.schema.ts

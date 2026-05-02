@@ -9,19 +9,16 @@ import { MOBILE_TAB_ITEMS } from "@/src/navigation/tabs";
 
 const TAB_ROUTE_BY_KEY: Record<string, string> = {
   dashboard: "dashboard",
-  transactions: "transactions",
   projects: "projects",
 };
 
 const TAB_ICON_BY_KEY: Record<string, ComponentProps<typeof MaterialIcons>["name"]> = {
   dashboard: "dashboard",
-  transactions: "receipt-long",
   projects: "folder",
 };
 
 const TAB_TITLE_BY_KEY: Record<string, string> = {
   dashboard: "Dashboard",
-  transactions: "Transactions",
   projects: "Projets",
 };
 

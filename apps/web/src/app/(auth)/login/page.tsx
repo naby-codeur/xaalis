@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
+import { xaAuthFrame, xaBtnPrimary, xaBtnSecondary, xaInput } from "@/lib/xaalis-ui";
 import { WEB_ROUTES } from "shared";
 
 const showDevEntry =
@@ -79,90 +80,90 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto w-full max-w-md">
-      <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Connexion
-        </h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          Accédez à votre espace Xaliss Manager.
-        </p>
+      <div className={xaAuthFrame}>
+        <div className="rounded-2xl bg-white/95 p-8 shadow-inner dark:bg-zinc-950/95">
+          <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 dark:text-violet-300">
+            Xaalis
+          </p>
+          <h1 className="mt-2 bg-gradient-to-br from-violet-700 to-teal-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent dark:from-violet-300 dark:to-teal-400">
+            Connexion
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+            Retrouvez vos tableaux, membres et flux en un clin d’œil.
+          </p>
 
-        <form className="mt-8 flex flex-col gap-4" onSubmit={onSubmit}>
-          <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-zinc-700 dark:text-zinc-300">
-              E-mail
-            </span>
-            <input
-              required
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(ev) => setEmail(ev.target.value)}
-              className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-950 outline-none ring-zinc-400 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-zinc-700 dark:text-zinc-300">
-              Mot de passe
-            </span>
-            <input
-              required
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(ev) => setPassword(ev.target.value)}
-              className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-950 outline-none ring-zinc-400 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
-            />
-          </label>
+          <form className="mt-8 flex flex-col gap-4" onSubmit={onSubmit}>
+            <label className="flex flex-col gap-1.5 text-sm">
+              <span className="font-medium text-violet-950 dark:text-zinc-300">E-mail</span>
+              <input
+                required
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(ev) => setEmail(ev.target.value)}
+                className={xaInput}
+              />
+            </label>
+            <label className="flex flex-col gap-1.5 text-sm">
+              <span className="font-medium text-violet-950 dark:text-zinc-300">Mot de passe</span>
+              <input
+                required
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(ev) => setPassword(ev.target.value)}
+                className={xaInput}
+              />
+            </label>
 
-          {error ? (
-            <p className="text-sm text-red-600 dark:text-red-400" role="alert">
-              {error}
-            </p>
+            {error ? (
+              <p
+                className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300"
+                role="alert"
+              >
+                {error}
+              </p>
+            ) : null}
+
+            <button type="submit" disabled={loading} className={`${xaBtnPrimary} mt-1 w-full`}>
+              {loading ? "Connexion…" : "Se connecter"}
+            </button>
+          </form>
+
+          {showDevEntry ? (
+            <div className="mt-6 border-t border-violet-100 pt-6 dark:border-zinc-800">
+              <p className="text-xs text-zinc-500 dark:text-zinc-500">
+                Mode développement : session de démo sans compte en base.
+              </p>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={onDevLogin}
+                className={`${xaBtnSecondary} mt-3 w-full border-dashed`}
+              >
+                Entrer en mode dev
+              </button>
+            </div>
           ) : null}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-2 flex h-11 items-center justify-center rounded-full bg-zinc-900 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-          >
-            {loading ? "Connexion…" : "Se connecter"}
-          </button>
-        </form>
-
-        {showDevEntry ? (
-          <div className="mt-6 border-t border-zinc-200 pt-6 dark:border-zinc-800">
-            <p className="text-xs text-zinc-500 dark:text-zinc-500">
-              Mode développement : session de démo sans compte en base.
-            </p>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={onDevLogin}
-              className="mt-3 w-full rounded-full border border-dashed border-zinc-400 py-2.5 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-100 disabled:opacity-60 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-900"
+          <p className="mt-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+            Pas encore de compte ?{" "}
+            <Link
+              href={WEB_ROUTES.register}
+              className="font-semibold text-violet-700 underline-offset-4 hover:underline dark:text-violet-300"
             >
-              Entrer en mode dev
-            </button>
-          </div>
-        ) : null}
-
-        <p className="mt-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
-          Pas encore de compte ?{" "}
-          <Link
-            href={WEB_ROUTES.register}
-            className="font-medium text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-100"
-          >
-            Créer un compte
-          </Link>
-        </p>
-        <p className="mt-4 text-center text-sm">
-          <Link
-            href={WEB_ROUTES.home}
-            className="text-zinc-500 underline-offset-4 hover:text-zinc-800 hover:underline dark:hover:text-zinc-300"
-          >
-            Retour à l’accueil
-          </Link>
-        </p>
+              Créer un compte
+            </Link>
+          </p>
+          <p className="mt-4 text-center text-sm">
+            <Link
+              href={WEB_ROUTES.home}
+              className="text-zinc-500 underline-offset-4 transition-colors hover:text-violet-700 hover:underline dark:hover:text-violet-300"
+            >
+              Retour à l’accueil
+            </Link>
+          </p>
+        </div>
       </div>
     </main>
   );

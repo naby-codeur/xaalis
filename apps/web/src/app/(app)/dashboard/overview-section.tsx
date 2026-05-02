@@ -3,5 +3,11 @@ import { getOverviewMetrics } from "@/lib/metrics-server";
 
 export async function DashboardOverviewSection() {
   const data = await getOverviewMetrics();
-  return <OverviewChart data={data} />;
+  return (
+    <OverviewChart
+      data={data}
+      title="Synthèse générale (overview)"
+      lineName="Indicateur"
+    />
+  );
 }

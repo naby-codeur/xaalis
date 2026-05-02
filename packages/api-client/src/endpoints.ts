@@ -5,7 +5,6 @@ import {
   type MetricsResponse,
   type Project,
   type RegisterInput,
-  type Transaction,
 } from "shared";
 
 import { ApiClient } from "./client";
@@ -32,9 +31,6 @@ export function createEndpoints(client: ApiClient) {
       cashflow: () => client.get<MetricsResponse>(API_ROUTES.metrics.cashflow),
       projects: () => client.get<MetricsResponse>(API_ROUTES.metrics.projects),
       team: () => client.get<MetricsResponse>(API_ROUTES.metrics.team),
-    },
-    transactions: {
-      list: () => client.get<{ data: Transaction[] }>(API_ROUTES.transactions.list),
     },
     projects: {
       list: () => client.get<{ data: Project[] }>(API_ROUTES.projects.list),

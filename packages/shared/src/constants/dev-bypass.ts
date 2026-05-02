@@ -13,5 +13,6 @@ export function getDevBypassAuthenticatedUser(): AuthenticatedUser {
     createdAt: new Date(0).toISOString(),
     organizationId: DEV_BYPASS_ORG_ID,
     role: ROLES.ADMIN,
+    organizationLogoUrl: null,
   };
 }

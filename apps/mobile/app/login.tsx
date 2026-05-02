@@ -61,7 +61,7 @@ export default function LoginScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContent}>
       <View style={styles.container}>
-        <Text style={styles.title}>Xaliss Manager</Text>
+        <Text style={styles.title}>Xaalis</Text>
         <Text style={styles.subtitle}>Connectez-vous a votre compte</Text>
 
         <TextInput

@@ -1,6 +1,11 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import { loginSchema, refreshSchema, registerSchema } from "shared";
+import {
+  loginSchema,
+  refreshSchema,
+  registerSchema,
+  updateOrganizationLogoSchema,
+} from "shared";
 
 import * as authService from "../services/auth.service";
 
@@ -39,4 +44,26 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
 
 export async function logout(request: FastifyRequest, reply: FastifyReply) {
   return reply.send({ ok: true });
+}
+
+export async function getOrganizationLogo(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const jwtUser = request.user!;
+  const result = await authService.getOrganizationLogo(jwtUser.organizationId);
+  return reply.send(result);
+}
+
+export async function updateOrganizationLogo(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const jwtUser = request.user!;
+  const body = updateOrganizationLogoSchema.parse(request.body ?? {});
+  const result = await authService.updateOrganizationLogo({
+    organizationId: jwtUser.organizationId,
+    logoUrl: body.logoUrl,
+  });
+  return reply.send(result);
 }

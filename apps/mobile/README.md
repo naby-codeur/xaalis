@@ -1,6 +1,6 @@
 # Mobile App (`apps/mobile`)
 
-Application Expo pour Xaalis Manager.
+Application Expo pour Xaalis.
 
 Objectif actuel (etape 8): parcours `login -> dashboard` avec restauration de session et refresh token.
 

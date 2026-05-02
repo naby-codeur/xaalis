@@ -1,5 +1,5 @@
 export const APP_CONFIG = {
-  name: "Xaliss Manager",
+  name: "Xaalis",
   version: "0.1.0",
   defaultCurrency: "XOF",
   defaultLocale: "fr",

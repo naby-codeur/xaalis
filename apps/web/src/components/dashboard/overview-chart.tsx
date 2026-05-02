@@ -1,5 +1,6 @@
 "use client";
 
+import { xaGlassPanel } from "@/lib/xaalis-ui";
 import type { MetricsResponse } from "shared";
 import {
   CartesianGrid,
@@ -21,12 +22,20 @@ function formatCompactXof(value: number): string {
   return value.toLocaleString("fr-FR");
 }
 
-export function OverviewChart({ data }: { data: MetricsResponse }) {
+export function OverviewChart({
+  data,
+  title = "Flux net mensuel",
+  lineName = "Flux net",
+}: {
+  data: MetricsResponse;
+  title?: string;
+  lineName?: string;
+}) {
   if (data.series.length === 0) {
     return (
-      <section className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
+      <section className={xaGlassPanel}>
         <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Flux net mensuel
+          {title}
         </h2>
         <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
           Aucune série renvoyée par l’API pour cette organisation (agrégations
@@ -52,7 +61,7 @@ export function OverviewChart({ data }: { data: MetricsResponse }) {
     <section className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Flux net mensuel
+          {title}
         </h2>
         {mock ? (
           <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-950 dark:bg-amber-950/50 dark:text-amber-100">
@@ -69,7 +78,7 @@ export function OverviewChart({ data }: { data: MetricsResponse }) {
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{unit}</p>
       )}
 
-      <div className="mt-6 h-72 w-full min-w-0 text-zinc-900 dark:text-zinc-100">
+      <div className="mt-6 h-72 w-full min-w-0 text-violet-600 dark:text-violet-400">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data.series}
@@ -101,15 +110,16 @@ export function OverviewChart({ data }: { data: MetricsResponse }) {
               }
               labelFormatter={(label) => String(label)}
               contentStyle={{
-                borderRadius: 12,
-                border: "1px solid rgb(228 228 231)",
+                borderRadius: 14,
+                border: "1px solid rgb(221 214 254)",
                 fontSize: 12,
+                boxShadow: "0 12px 40px -12px rgb(139 92 246 / 0.2)",
               }}
             />
             <Line
               type="monotone"
               dataKey="value"
-              name="Flux net"
+              name={lineName}
               stroke="currentColor"
               strokeWidth={2}
               dot={{ r: 3, fill: "currentColor" }}

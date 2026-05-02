@@ -1,7 +1,7 @@
-# Cahier des charges — Xaliss Manager
+# Cahier des charges — Xaalis
 
 **Document :** spécification fonctionnelle, technique et stratégique  
-**Produit :** Xaliss Manager  
+**Produit :** Xaalis  
 **Version :** 0.1.0  
 **Date :** avril 2026
 
@@ -11,7 +11,7 @@
 
 ### 1.1 Présentation
 
-**Xaliss Manager** est une plateforme de gestion financière intelligente destinée aux :
+**Xaalis** est une plateforme de gestion financière intelligente destinée aux :
 
 - ONG  
 - Associations  
@@ -23,7 +23,7 @@
 La solution permet de piloter :
 
 - les flux financiers ;  
-- les transactions ;  
+- les cotisations et mouvements financiers ;  
 - les projets ;  
 - les équipes ;  
 - les tableaux de bord analytiques ;  
@@ -239,7 +239,7 @@ Login
 
 #### Permissions granulaires (exemples)
 
-- `transaction.create` / `transaction.read` / `transaction.update`  
+- `contributions.manage` / `contributions.read`  
 - `reports.export`  
 - `users.manage`  
 
@@ -284,7 +284,7 @@ Layout type SaaS :
 Menus :
 
 - Dashboard  
-- Transactions  
+- Cotisations  
 - Caisses  
 - Projets  
 - Rapports  
@@ -317,7 +317,7 @@ flowchart TB
       MAIN["main\npages + graphiques"]
     end
   end
-  SB --> ROUTES["Routes app\n/dashboard, /transactions, ..."]
+  SB --> ROUTES["Routes app\n/dashboard, /contributions, ..."]
   NB --> API_ME["GET .../auth/me"]
   NB --> PRICING["/pricing"]
   MAIN --> API_METRICS["GET .../metrics/..."]
@@ -326,7 +326,7 @@ flowchart TB
 
 | Zone UI              | Rôle                         | Dépendances typiques                          |
 | -------------------- | ---------------------------- | --------------------------------------------- |
-| Sidebar — navigation | Accès modules                | Routes web `/dashboard`, `/transactions`, …   |
+| Sidebar — navigation | Accès modules                | Routes web `/dashboard`, `/contributions`, …  |
 | Sidebar — pied       | Paramètres + déconnexion     | `/settings` ; `POST .../auth/logout`          |
 | Navbar — gauche      | Orientation                  | Breadcrumb / titre                            |
 | Navbar — droite      | Identité, pricing, notifs    | `GET .../auth/me` ; `/pricing` ; `/profile`   |
@@ -361,7 +361,7 @@ Dashboard
 ### 6.3 Sections métier
 
 - Dashboard  
-- Transactions  
+- Cotisations  
 - Caisses  
 - Projets  
 - Rapports  
@@ -600,7 +600,7 @@ Le **détail opérationnel** (micro-étapes, ordre d’exécution, définitions 
 
 ## 16. Conclusion
 
-Xaliss Manager vise une plateforme **SaaS moderne**, **extensible**, **sécurisée** et **prête à croître** sur plusieurs marchés, avec une séparation explicite **Web / Mobile / API / Data** et des packages partagés pour limiter la dette et les divergences.
+Xaalis vise une plateforme **SaaS moderne**, **extensible**, **sécurisée** et **prête à croître** sur plusieurs marchés, avec une séparation explicite **Web / Mobile / API / Data** et des packages partagés pour limiter la dette et les divergences.
 
 **Le présent document (version 0.1.0) constitue la base officielle de développement**, sous réserve de validation par le porteur produit et l’équipe technique.
 
@@ -717,7 +717,7 @@ flowchart LR
 | | |
 | --- | --- |
 | **Objectif** | Appliquer systématiquement `organizationId` et permissions sur les handlers API sensibles. |
-| **Actions** | Matrice rôles / permissions dans `packages/shared` + enforcement dans `apps/api` (middleware ou guards) ; auditer les requêtes Prisma pour filtre tenant ; tests sur au moins un module critique (ex. transactions ou équipe). |
+| **Actions** | Matrice rôles / permissions dans `packages/shared` + enforcement dans `apps/api` (middleware ou guards) ; auditer les requêtes Prisma pour filtre tenant ; tests sur au moins un module critique (ex. cotisations ou équipe). |
 | **Définition de terminé** | Impossible d’accéder aux données d’une autre organisation dans les scénarios testés ; documentation de la matrice. |
 | **Risque principal** | Oublis de filtre sur une route secondaire (fuite inter-tenant). |
 
@@ -786,7 +786,7 @@ flowchart LR
 | | |
 | --- | --- |
 | **Objectif** | Accès aux **mêmes sections métier** que la sidebar web, avec UI native (tabs / drawer / stacks). |
-| **Actions** | Consommer la config `packages/shared` pour construire le menu mobile ; implémenter progressivement les stacks par section (dashboard, transactions, etc.) même si certaines écrans sont des placeholders au début. |
+| **Actions** | Consommer la config `packages/shared` pour construire le menu mobile ; implémenter progressivement les stacks par section (dashboard, cotisations, etc.) même si certaines écrans sont des placeholders au début. |
 | **Définition de terminé** | Navigation cohérente avec la liste officielle du cahier ; pas de divergence de noms de routes métier sans décision documentée. |
 | **Risque principal** | Divergence web/mobile si la config partagée n’est pas la source unique. |
 

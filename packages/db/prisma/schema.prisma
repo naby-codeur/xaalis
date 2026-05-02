@@ -18,12 +18,63 @@ model Organization {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   slug        String       @unique
+  logoUrl     String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  memberships Membership[]
-  transactions Transaction[]
-  projects    Project[]
+  memberships    Membership[]
+  projects       Project[]
+  members        OrganizationMember[]
+  contributions  Contribution[]
+}
+
+/// Membre annuaire (contact organisation) — distinct du compte utilisateur (Membership).
+model OrganizationMember {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String   @db.ObjectId
+  fullName       String
+  email          String
+  phone          String?
+  notes          String?
+  targetRole     Role     @default(VIEWER)
+  joinedAt       DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdBy      String   @db.ObjectId
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  contributions Contribution[]
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+}
+
+enum ContributionStatus {
+  PENDING
+  PAID
+  LATE
+}
+
+model Contribution {
+  id             String             @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String             @db.ObjectId
+  memberId       String?            @db.ObjectId
+  memberName     String
+  amount         Float
+  currency       String             @default("XOF")
+  period         String
+  status         ContributionStatus @default(PENDING)
+  dueDate        DateTime
+  paidAt         DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  createdBy      String             @db.ObjectId
+
+  organization Organization        @relation(fields: [organizationId], references: [id])
+  member       OrganizationMember? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([organizationId, status])
 }
 
 model User {
@@ -77,33 +128,5 @@ model Project {
   updatedAt      DateTime     @updatedAt
 
   organization   Organization @relation(fields: [organizationId], references: [id])
-  transactions   Transaction[]
-
   @@index([organizationId])
-}
-
-enum TransactionType {
-  INCOME
-  EXPENSE
-  TRANSFER
-}
-
-model Transaction {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
-  organizationId String          @db.ObjectId
-  projectId      String?         @db.ObjectId
-  type           TransactionType
-  amount         Float
-  currency       String          @default("XOF")
-  description    String?
-  occurredAt     DateTime
-  createdBy      String          @db.ObjectId
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-
-  organization   Organization    @relation(fields: [organizationId], references: [id])
-  project        Project?        @relation(fields: [projectId], references: [id])
-
-  @@index([organizationId, occurredAt])
-  @@index([organizationId, type])
 }
